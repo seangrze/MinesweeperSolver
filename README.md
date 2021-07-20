@@ -7,7 +7,8 @@ will place flags in every empty adjacent square.
 
 # How to Play
 
-To play the game, run GUIDriver. This will present the user with a 30 x 16 grid with 99 mines. Then you can play as usual. To activate the solver, press S on your keyboard.
+To play the game, run GUIDriver in Java 12.0.2. This will present the user with a 30 x 16 grid with 99 mines. Then you can play as usual. 
+To activate the solver, press S on your keyboard.
 The solver will attempt to win the game using the same information as the player.
 
 # How it Works
