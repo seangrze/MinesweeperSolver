@@ -17,16 +17,15 @@ public class SolverEvent extends KeyAdapter {
 
     private Board board;
     private Game game;
-    private Solver solver;
 
     public SolverEvent(Board board, Game game) {
         this.board = board;
         this.game = game;
-        this.solver = new Solver();
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+        System.out.println("hello");
         if(e.getKeyChar() == 's') {
             board.useSolver(game.makeAction(new Input(0, 0, Actions.CURRENT)));
         }

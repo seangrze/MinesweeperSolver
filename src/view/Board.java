@@ -21,6 +21,7 @@ public class Board extends Frame{
     private Tile[][] board;
     private Label flagCounter;
     private Game game;
+    private Dialog message;
 
     public Board(Game game) {
         this.game = game;
@@ -45,7 +46,6 @@ public class Board extends Frame{
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.gridheight = 2;
         flagCounter = new Label("Flags: " + initial.mines);
-        //System.out.println(flagCounter.getBounds());
         grid.add(flagCounter, gbc);
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
@@ -53,8 +53,6 @@ public class Board extends Frame{
         for(int i=2;i<=height+1;i++) {
             for(int j=0;j<width;j++) {
                 Tile tile = new Tile(i-2, j);
-                //System.out.println(tile.getBounds());
-                //tile.setBounds(BTN_WIDTH*j + insets.right, BTN_HEIGHT*i + insets.bottom, BTN_WIDTH, BTN_HEIGHT);
                 gbc.gridx = j;
                 gbc.gridy = i;
                 gbc.weightx = 1.0;
@@ -70,18 +68,21 @@ public class Board extends Frame{
         addWindowListener(new WindowEvents(this));
         setFocusable(true);
         addKeyListener(new SolverEvent(this, game));
+        message = new Dialog(this, "Message", true);
+        message.setLayout(new FlowLayout());
+        message.setBounds(50, 50, 300, 100);
+        message.addWindowListener(new WindowEvents(message));
     }
 
-    //Displays state on the screen
+    //Displays state on the screen and messages for if you win or lose
     public void display(GameState state) {
-        //displayBoard(state);
-
         flagCounter.setText("Flags: " + state.mines);
         int width = state.board[0].length;
         int height = state.board.length;
         for(int i=0;i<height;i++) {
             for(int j=0;j<width;j++) {
                 if(state.board[i][j] != '-' && state.board[i][j] != '0') {
+                    board[i][j].setForeground(Color.WHITE);
                     board[i][j].setLabel("" + state.board[i][j]);
                 } else {
                     board[i][j].setLabel("");
@@ -91,8 +92,14 @@ public class Board extends Frame{
                 }
             }
         }
-        //solver.solve(state);
-        //revalidate();
+        if(state.win) {
+            message.add(new Label("You Win"));
+            message.setVisible(true);
+        }
+        if(state.lose) {
+            message.add(new Label("You Lose"));
+            message.setVisible(true);
+        }
     }
 
     //Sends state to solver and gets input
@@ -103,6 +110,14 @@ public class Board extends Frame{
         while(!current.win && !current.lose) {
             current = game.makeAction(solver.solve(current));
             display(current);
+        }
+        if(state.win) {
+            message.add(new Label("You Win"));
+            message.setVisible(true);
+        }
+        if(state.lose) {
+            message.add(new Label("You Lose"));
+            message.setVisible(true);
         }
     }
 

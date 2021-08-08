@@ -13,14 +13,14 @@ import java.awt.event.WindowListener;
 
 public class WindowEvents extends WindowAdapter {
 
-    Frame f;
+    private Window w;
 
-    public WindowEvents(Frame f) {
-        this.f = f;
+    public WindowEvents(Window w) {
+        this.w = w;
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        f.dispose();
+        w.dispose();
     }
 }
