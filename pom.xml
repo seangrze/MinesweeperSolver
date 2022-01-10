@@ -1,0 +1,12 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <groupId>grzenda</groupId>
+    <artifactId>minesweeper</artifactId>
+    <properties>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
+    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <url>http://maven.apache.org</url>
+    <version>0.0.1</version>
+
+</project>

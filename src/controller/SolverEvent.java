@@ -25,7 +25,6 @@ public class SolverEvent extends KeyAdapter {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println("hello");
         if(e.getKeyChar() == 's') {
             board.useSolver(game.makeAction(new Input(0, 0, Actions.CURRENT)));
         }
