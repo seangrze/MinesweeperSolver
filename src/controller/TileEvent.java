@@ -7,6 +7,7 @@ package controller;
 import mine.*;
 import view.*;
 
+import java.awt.*;
 import java.awt.event.*;
 
 public class TileEvent extends MouseAdapter {
@@ -25,12 +26,11 @@ public class TileEvent extends MouseAdapter {
         GameState state = new GameState(null, 0, false, false);
         if(e.getButton() == MouseEvent.BUTTON1) {
             state = game.makeAction(new Input(tile.row, tile.col, Actions.LEFT));
-        } else if(e.getButton() == MouseEvent.BUTTON2) {
-            state = game.makeAction(new Input(tile.row, tile.col, Actions.MIDDLE));
         } else {
             state = game.makeAction(new Input(tile.row, tile.col, Actions.RIGHT));
         }
         board.display(state);
+        board.requestFocusInWindow();
     }
 
     public void mouseReleased(MouseEvent e) {

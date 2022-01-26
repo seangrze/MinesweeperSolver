@@ -22,6 +22,7 @@ public class Board extends Frame{
     private Label flagCounter;
     private Game game;
     private Dialog message;
+    private final Label result = new Label();
 
     public Board(Game game) {
         this.game = game;
@@ -41,12 +42,18 @@ public class Board extends Frame{
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 0;
+        gbc.gridx = 5;
         gbc.gridy = 0;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.gridheight = 2;
         flagCounter = new Label("Flags: " + initial.mines);
         grid.add(flagCounter, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridwidth = 5;
+        Button solver = new Button("Solve");
+        grid.add(solver, gbc);
+
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
 
@@ -62,16 +69,20 @@ public class Board extends Frame{
                 board[i-2][j] = tile;
             }
         }
+
         add(grid);
         addComponentListener(new ResizeEvent(this));
         setVisible(true);
         addWindowListener(new WindowEvents(this));
+        solver.addActionListener(new SolverEvent(this, game));
         setFocusable(true);
-        addKeyListener(new SolverEvent(this, game));
+        requestFocusInWindow();
+
         message = new Dialog(this, "Message", true);
         message.setLayout(new FlowLayout());
         message.setBounds(50, 50, 300, 100);
         message.addWindowListener(new WindowEvents(message));
+        message.add(result);
     }
 
     //Displays state on the screen and messages for if you win or lose
@@ -82,23 +93,50 @@ public class Board extends Frame{
         for(int i=0;i<height;i++) {
             for(int j=0;j<width;j++) {
                 if(state.board[i][j] != '-' && state.board[i][j] != '0') {
-                    board[i][j].setForeground(Color.WHITE);
+                    Color color = null;
+                    switch(state.board[i][j]) {
+                        case '1': color = Colors.BLUE;
+                        break;
+                        case '2': color = Colors.DARK_GREEN;
+                        break;
+                        case '3': color = Colors.RED;
+                        break;
+                        case '4': color = Colors.DARK_PURPLE;
+                        break;
+                        case '5': color = Colors.DARK_RED;
+                        break;
+                        case '6': color = Colors.CYAN;
+                        break;
+                        case '8': color = Colors.DARK_GRAY;
+                        break;
+                        default: color = Colors.BLACK;
+                    }
+                    board[i][j].setForeground(color);
                     board[i][j].setLabel("" + state.board[i][j]);
                 } else {
-                    board[i][j].setLabel("");
+                    board[i][j].setLabel("  ");
                 }
                 if(state.board[i][j] != '-' && state.board[i][j] != 'F') {
-                    board[i][j].setBackground(Color.DARK_GRAY);
+                    board[i][j].setBackground(Colors.LIGHT_GRAY);
+                }
+                if(state.board[i][j] == '-') {
+                    board[i][j].setBackground(Colors.OFF_WHITE);
                 }
             }
         }
         if(state.win) {
-            message.add(new Label("You Win"));
+            result.setText("You Win");
             message.setVisible(true);
+            game.makeAction(new Input(0, 0, START));
+            display(game.makeAction(new Input(0, 0, CURRENT)));
+            return;
         }
         if(state.lose) {
-            message.add(new Label("You Lose"));
+            result.setText("You Lose");
             message.setVisible(true);
+            game.makeAction(new Input(0, 0, START));
+            display(game.makeAction(new Input(0, 0, CURRENT)));
+            return;
         }
     }
 

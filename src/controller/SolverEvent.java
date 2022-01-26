@@ -10,10 +10,12 @@ import mine.Input;
 import solver.Solver;
 import view.Board;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class SolverEvent extends KeyAdapter {
+public class SolverEvent implements ActionListener {
 
     private Board board;
     private Game game;
@@ -24,9 +26,7 @@ public class SolverEvent extends KeyAdapter {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        if(e.getKeyChar() == 's') {
-            board.useSolver(game.makeAction(new Input(0, 0, Actions.CURRENT)));
-        }
+    public void actionPerformed(ActionEvent e) {
+        board.useSolver(game.makeAction(new Input(0, 0, Actions.CURRENT)));
     }
 }

@@ -21,8 +21,8 @@ public class ResizeEvent extends ComponentAdapter {
     public void componentResized(ComponentEvent e) {
         int height = frame.getHeight();
         for(Component comp: frame.getComponents()) {
-            comp.setFont(new Font("Arial", Font.PLAIN, height / 25));
-            frame.revalidate();
+            comp.setFont(new Font("Arial", Font.PLAIN, height/30));
         }
+        frame.revalidate();
     }
 }

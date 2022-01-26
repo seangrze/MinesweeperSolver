@@ -28,8 +28,6 @@ public class PlayerDriver {
             switch(click) {
                 case 'L': input.action = LEFT;
                 break;
-                case 'M': input.action = MIDDLE;
-                break;
                 case 'R': input.action = RIGHT;
                 break;
             }

@@ -9,7 +9,7 @@ import static mine.Actions.*;
 
 public class Game {
 
-    private int width, height, numMines;
+    private final int width, height, numMines;
     private int mineCounter;
     private boolean win = false, lose = false;
     private boolean firstClick = true;
@@ -31,8 +31,6 @@ public class Game {
         switch(input.action) {
             case LEFT: leftClick(input.row, input.col);
             break;
-            case MIDDLE: middleClick(input.row, input.col);
-            break;
             case RIGHT: rightClick(input.row, input.col);
             break;
             case START: startGame();
@@ -45,6 +43,7 @@ public class Game {
     private void startGame() {
         setupPlayBoard();
         setupInternalBoard();
+        mineCounter = numMines;
         firstClick = true;
         win = false;
         lose = false;
@@ -69,7 +68,21 @@ public class Game {
     }
 
     //Performs left click
+    //No action is performed if a flag is clicked
+    //Adjacent tiles will be revealed if a number is clicked
     private void leftClick(int row, int col) {
+        if(!inBounds(row, col) || playBoard[row][col] == 'F' || playBoard[row][col] == '0' || win || lose) {
+            return;
+        }
+        if(playBoard[row][col] != '-' && playBoard[row][col] - '0' == countFlags(row, col)) {
+            for(int i=row-1;i<=row+1;i++) {
+                for(int j=col-1;j<=col+1;j++) {
+                    if(inBounds(i, j) && playBoard[i][j] == '-') {
+                        leftClickHelper(i, j);
+                    }
+                }
+            }
+        }
         leftClickHelper(row, col);
         if(checkForWin()) {
             win = true;
@@ -80,10 +93,6 @@ public class Game {
     //Performs left click on space (row, col) and recursively calls on adjacent
     //spaces if (row, col) has a value of 0
     private void leftClickHelper(int row, int col) {
-        //Check if space is valid
-        if(!inBounds(row, col) || win || lose) {
-            return;
-        }
         //Generates board if first click
         if(firstClick) {
             firstClick = false;
@@ -112,12 +121,27 @@ public class Game {
         }
     }
 
-    //returns the number of mines adjacent to (row, col)
+    //Returns the number of mines adjacent to (row, col)
+    //Assumes (row, col) is a number tile
     private int countMines(int row, int col) {
         int total = 0;
         for(int i=row-1;i<=row+1;i++) {
             for(int j=col-1;j<=col+1;j++) {
                 if(inBounds(i, j) && internalBoard[i][j] == 1) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
+    //Returns the number of flags adjacent to (row, col)
+    //Assumes tile at (row, col) is a number
+    private int countFlags(int row, int col) {
+        int total = 0;
+        for(int i=row-1;i<=row+1;i++) {
+            for(int j=col-1;j<=col+1;j++) {
+                if(inBounds(i, j) && playBoard[i][j] == 'F') {
                     total++;
                 }
             }
@@ -142,39 +166,48 @@ public class Game {
     private void revealMines() {
         for(int i=0;i<height;i++) {
             for(int j=0;j<width;j++) {
-                if(internalBoard[i][j] == 1) {
+                if(internalBoard[i][j] == 1 && playBoard[i][j] != 'F') {
                     playBoard[i][j] = 'M';
                 }
             }
         }
     }
 
-    //Sets adjacent spaces to flags if (row, col) is a number on playBoard
-    private void middleClick(int row, int col) {
-        if(!inBounds(row, col) || playBoard[row][col] == '-' || playBoard[row][col] == 'F' || win || lose) {
-            return;
-        }
-        for(int i=row-1;i<=row+1;i++) {
-            for(int j=col-1;j<=col+1;j++) {
-                if(inBounds(i, j) && playBoard[i][j] == '-')
-                    rightClick(i, j);
-            }
-        }
-    }
-
     //Sets (row, col) to flag if it is an empty space
     private void rightClick(int row, int col) {
-        if(!inBounds(row, col) || (playBoard[row][col] != '-' && playBoard[row][col] != 'F') || win || lose) {
+        if(!inBounds(row, col) || playBoard[row][col] == '0' || win || lose || firstClick) {
             return;
         }
         if(playBoard[row][col] == '-') {
             playBoard[row][col] = 'F';
             mineCounter--;
-        } else {
+        } else if(playBoard[row][col] == 'F') {
             playBoard[row][col] = '-';
             mineCounter++;
+        } else if(playBoard[row][col] - '0' - countFlags(row, col) == countEmpty(row, col)){
+            for(int i=row-1;i<=row+1;i++) {
+                for(int j=col-1;j<=col+1;j++) {
+                    if(inBounds(i, j) && playBoard[i][j] == '-') {
+                        playBoard[i][j] = 'F';
+                        mineCounter--;
+                    }
+                }
+            }
         }
+    }
 
+    //Returns the number of empty tiles adjacent to (row, col)
+    //Assumes (row, col) is a number tile
+    private int countEmpty(int row, int col) {
+        int total = 0;
+        for(int i=row-1;i<=row+1;i++) {
+            for(int j=col-1;j<=col+1;j++) {
+                if(inBounds(i, j) && playBoard[i][j] == '-') {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
     //Returns true if row and col are within the boundaries of the board
