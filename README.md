@@ -1,15 +1,15 @@
 # Minesweeper
-Minesweeper is a game in which the player is presented a grid and must determine which tiles contain mines. Left- clicking on an empty tile will
-either reveal a number or a mine. If it is the first click, it will always be a 0. This number is the number of mines that are touching that square. This
-includes tiles that are diagonal to it. Therefore, the number can be from 0 to 8. If the number is 0, all neighboring squares will automatically be revealed, since
-none of them can be mines. Right- clicking will place a flag on the tile. This can be used to mark where mines are on the grid. Left clicking on a number that is 
-equal to the number of adjacent flags will reveal all adjacent empty tiles. Right- clicking on a number that is equal to the number of empty tiles plus the 
-number of adjacent flags will mark flags on all adjacent tiles
+Minesweeper is a game in which the player is presented a grid and must determine which tiles contain mines. Left- clicking on an empty tile will either reveal a number or a mine. If it
+is the first click, it will always be a 0. This number is the number of mines that are touching that square. This includes tiles that are diagonal to it. Therefore, the number can be
+from 0 to 8. If the number is 0, all neighboring squares will automatically be revealed, since none of them can be mines. Right- clicking will place a flag on the tile. This can be used
+to mark where mines are on the grid. Left clicking on a number that is equal to the number of adjacent flags will reveal all adjacent empty tiles. Right- clicking on a number that is
+equal to the number of empty tiles plus the number of adjacent flags will mark flags on all adjacent tiles
 
 # How to Play
 
-To play the game, run GUIDriver in Java 12.0.2. This will present the user with a 30 x 16 grid with 99 mines. Then you can play as usual. 
-To activate the solver, click the button titled "solve" at any time during game play and the solver will attempt to solve the game with the given information (even if it is incorrect).
+To play the game, run GUIDriver in Java 12.0.2. (I run it as a Maven Project in Intellij. It should work in other IDEs and editors, but I have not tested this). This will present the
+user with a 30 x 16 grid with 99 mines. Then you can play as usual. To activate the solver, click the button titled "solve" at any time during game play and the solver will attempt to
+solve the game with the given information (even if the information is incorrect).
 
 # How it Works
 
