@@ -92,36 +92,43 @@ public class Board extends Frame{
         int height = state.board.length;
         for(int i=0;i<height;i++) {
             for(int j=0;j<width;j++) {
-                if(state.board[i][j] != '-' && state.board[i][j] != '0') {
-                    Color color = null;
-                    switch(state.board[i][j]) {
-                        case '1': color = Colors.BLUE;
-                        break;
-                        case '2': color = Colors.DARK_GREEN;
-                        break;
-                        case '3': color = Colors.RED;
-                        break;
-                        case '4': color = Colors.DARK_PURPLE;
-                        break;
-                        case '5': color = Colors.DARK_RED;
-                        break;
-                        case '6': color = Colors.CYAN;
-                        break;
-                        case '8': color = Colors.DARK_GRAY;
-                        break;
-                        default: color = Colors.BLACK;
-                    }
-                    board[i][j].setForeground(color);
-                    board[i][j].setLabel("" + state.board[i][j]);
+                Tile tile = board[i][j];
+                char value = state.board[i][j];
+
+                //Set button background
+                if(value == '-' || value == 'F') {
+                    tile.setBackground(Colors.OFF_WHITE);
                 } else {
-                    board[i][j].setLabel("  ");
+                    tile.setBackground(Colors.LIGHT_GRAY);
                 }
-                if(state.board[i][j] != '-' && state.board[i][j] != 'F') {
-                    board[i][j].setBackground(Colors.LIGHT_GRAY);
+
+                //Set button label
+                if(value == '-' || value == '0') {
+                    tile.setLabel("  ");
+                } else {
+                    tile.setLabel("" + value);
                 }
-                if(state.board[i][j] == '-') {
-                    board[i][j].setBackground(Colors.OFF_WHITE);
+
+                //Set text color
+                Color fg = null;
+                switch(value) {
+                    case '1': fg = Colors.BLUE;
+                    break;
+                    case '2': fg = Colors.DARK_GREEN;
+                    break;
+                    case '3': fg = Colors.RED;
+                    break;
+                    case '4': fg = Colors.DARK_PURPLE;
+                    break;
+                    case '5': fg = Colors.DARK_RED;
+                    break;
+                    case '6': fg = Colors.CYAN;
+                    break;
+                    case '8': fg = Colors.DARK_GRAY;
+                    break;
+                    default: fg = Colors.BLACK;
                 }
+                tile.setForeground(fg);
             }
         }
         if(state.win) {
